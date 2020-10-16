@@ -1,0 +1,15 @@
+body {
+    width: 100%;
+}
+table {
+    width: 50%;
+}
+tr {
+    display: flex;
+    flex-direction: row;
+    margin: 2px;
+}
+td {
+    padding: 1px;
+    border: 1px solid black;
+}

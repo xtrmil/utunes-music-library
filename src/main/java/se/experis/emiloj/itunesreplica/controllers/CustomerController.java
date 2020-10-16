@@ -6,6 +6,7 @@ import se.experis.emiloj.itunesreplica.models.Customer;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.TreeMap;
 
 @RestController
 public class CustomerController {
@@ -20,14 +21,16 @@ public class CustomerController {
     public Boolean addCustomer(@RequestBody Customer customer){
         return customerRepository.addCustomer(customer);
     }
-//    @RequestMapping(value = "/api/customers", method = RequestMethod.PUT)
-//    public Boolean updateCustomer(@RequestBody Customer customer){
-//        return customerRepository.updateCustomer(customer);
-//    }
 
-//    @RequestMapping(value = "/api/customers/{country}", method = RequestMethod.GET)
-//    public TreeMap<Int,String> getNumberOfCostumersPerCountry(@PathVariable String country){
-//        return customerRepository.getNumberOfCostumersPerCountry(country);
+    @RequestMapping(value = "/api/customers", method = RequestMethod.PUT)
+    public Boolean updateCustomer(@RequestBody Customer customer){
+        return customerRepository.updateCustomer(customer);
+    }
+
+    @RequestMapping(value = "/api/customers/countries", method = RequestMethod.GET)
+    public TreeMap<String, Integer> getNumberOfCostumersPerCountry(){
+        return customerRepository.getNumberOfCostumersPerCountry();
+    }
 
 //    getHigestSpendersDecendingOrder(){
 
