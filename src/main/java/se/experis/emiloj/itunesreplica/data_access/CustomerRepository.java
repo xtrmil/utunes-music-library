@@ -4,7 +4,10 @@ import se.experis.emiloj.itunesreplica.models.Customer;
 import org.sqlite.jdbc4.JDBC4PreparedStatement;
 
 import java.sql.*;
-import java.util.ArrayList;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public class CustomerRepository {
 
     private String URL ="jdbc:sqlite::resource:Chinook_Sqlite.sqlite";
@@ -15,7 +18,7 @@ public class CustomerRepository {
         try{
             conn = DriverManager.getConnection(URL);
             PreparedStatement prep =
-                    conn.prepareStatement("SELECT CustomerId, FirstName, LastName,Country,PostalCode, Phone FROM customer");
+                    conn.prepareStatement("SELECT CustomerId, FirstName, LastName, Country, PostalCode, Phone FROM customer");
             ResultSet set = prep.executeQuery();
             while(set.next()){
                 customers.add( new Customer(
@@ -50,7 +53,6 @@ public class CustomerRepository {
             PreparedStatement prep =
                     conn.prepareStatement("INSERT INTO customer(FirstName,LastName,Company,Address,City,State,Country,PostalCode,Phone,Fax,Email,SupportRepId)" +
                             " VALUES(?,?,'Experis','Street 2','Stockholm','Sodermanland',?,?,?,'74567','first.last@mail.com',8)");
-            //prep.setInt(1,customer.getCustomerId());
             prep.setString(1,customer.getFirstName());
             prep.setString(2,customer.getLastName());
             prep.setString(3,customer.getCountry());
@@ -74,5 +76,95 @@ public class CustomerRepository {
         }
         // ---
         return success;
+    }
+
+    public boolean updateCustomer(Customer customer) {
+        Boolean success = false;
+
+        try {
+            conn = DriverManager.getConnection(URL);
+            PreparedStatement prep =
+                    conn.prepareStatement("UPDATE customer SET FirstName=?, LastName=?, Country=?, PostalCode=?, Phone=?  WHERE CustomerId = ?");
+            prep.setString(1, customer.getFirstName());
+            prep.setString(2, customer.getLastName());
+            prep.setString(3, customer.getCountry());
+            prep.setString(4, customer.getPostalCode());
+            prep.setString(5, customer.getPhoneNumber());
+            prep.setInt(6, customer.getCustomerId());
+
+            int result = prep.executeUpdate();
+            success = (result != 0);
+
+            System.out.println("Update went well!");
+
+        } catch (Exception exception) {
+            System.out.println(exception.toString());
+        }
+        finally {
+            try{
+                conn.close();
+            } catch (Exception exception){
+                System.out.println(exception.toString());
+            }
+        }
+
+        return success;
+    }
+
+    public LinkedHashMap<String, Double> getNumberOfCostumersPerCountry() {
+        var customer = getAllCustomers(); // create arraylist containing all customers
+        var map = new HashMap<String, Double>();
+
+        for (int i = 0; i<customer.size(); i++) {
+            if (!map.containsKey(customer.get(i).getCountry())) { // check if the country has no value in the map, if so set value to 1
+                map.put(customer.get(i).getCountry(), 1.0);
+            } else { // else if key exists, add 1 to the linked value
+                map.put(customer.get(i).getCountry(), map.get(customer.get(i).getCountry())+1);
+            }
+        }
+
+        return sortMapByValue(map);
+    }
+
+    public LinkedHashMap<String, Double> getHighestSpender() {
+        var spendingScheme = new HashMap<String, Double>();
+
+        try {
+            conn = DriverManager.getConnection(URL);
+            PreparedStatement prep =
+                    conn.prepareStatement("SELECT Customer.FirstName, Customer.LastName, Invoice.Total " +
+                            "FROM customer INNER JOIN invoice " +
+                            "WHERE Customer.CustomerId=Invoice.CustomerId");
+            ResultSet set = prep.executeQuery();
+
+            while(set.next()) {
+                String name = set.getString("FirstName") + " " + set.getString("LastName");
+                double totalSpent = set.getDouble("Total");
+                if (!spendingScheme.containsKey(name)) { // check if the country has no value in the map, if so set value to 1
+                    spendingScheme.put(name, totalSpent);
+                } else { // else if key exists, add 1 to the linked value
+                    spendingScheme.put(name, spendingScheme.get(name)+totalSpent);
+                }
+            }
+
+        } catch (Exception exception) {
+            System.out.println(exception.toString());
+        }
+
+        return sortMapByValue(spendingScheme);
+    }
+
+    public LinkedHashMap<String, Double> sortMapByValue(HashMap<String, Double> map) {
+        var sortedMap = new LinkedHashMap<String, Double>();
+
+        Stream<Map.Entry<String, Double>> tempMap = map.entrySet()
+                .stream()
+                .sorted(Collections.reverseOrder(Map.Entry.comparingByValue())); // creating a stream sorted by value
+
+        tempMap.forEach(entry -> {
+            sortedMap.put(entry.getKey(), entry.getValue());
+        }); // adding entries to a linked hashmap to preserve the order of the stream
+
+        return sortedMap;
     }
 }

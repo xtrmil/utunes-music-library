@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="nav-bar">
+    <div class="item">All users</div>
+    <div class="title">Utunes Music Library</div>
+    <div class="item">User per country</div>
+</div>
+<table>
+    <tr th:each="cust: ${customers}">
+        <td th:text="${cust.getCustomerId()}"></td>
+        <td th:text="${cust.getFirstName()} + ' ' + ${cust.getLastName()}"></td>
+        <td th:text="${cust.getCountry()}"></td>
+        <td th:text="${cust.getPostalCode()}"></td>
+        <td th:text="${cust.getPhoneNumber()}"></td>
+    </tr>
+</table>
+</body>
+</html>
