@@ -4,8 +4,9 @@ import se.experis.emiloj.itunesreplica.models.Customer;
 import org.sqlite.jdbc4.JDBC4PreparedStatement;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.TreeMap;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class CustomerRepository {
 
@@ -17,7 +18,7 @@ public class CustomerRepository {
         try{
             conn = DriverManager.getConnection(URL);
             PreparedStatement prep =
-                    conn.prepareStatement("SELECT CustomerId, FirstName, LastName,Country,PostalCode, Phone FROM customer");
+                    conn.prepareStatement("SELECT CustomerId, FirstName, LastName, Country, PostalCode, Phone FROM customer");
             ResultSet set = prep.executeQuery();
             while(set.next()){
                 customers.add( new Customer(
@@ -110,44 +111,60 @@ public class CustomerRepository {
         return success;
     }
 
-    public TreeMap<String, Integer> getNumberOfCostumersPerCountry() {
-        var customer = getAllCustomers();
-        var map = new TreeMap<String, Integer>();
-
+    public LinkedHashMap<String, Double> getNumberOfCostumersPerCountry() {
+        var customer = getAllCustomers(); // create arraylist containing all customers
+        var map = new HashMap<String, Double>();
 
         for (int i = 0; i<customer.size(); i++) {
-            int count = 1;
-            if (map.get(customer.get(i).getCountry()) == null) {
-                map.put(customer.get(i).getCountry(), 1);
-            } else {
-                map.put(customer.get(i).getCountry(), map.get(customer.get(i).getCountry()+1));
+            if (!map.containsKey(customer.get(i).getCountry())) { // check if the country has no value in the map, if so set value to 1
+                map.put(customer.get(i).getCountry(), 1.0);
+            } else { // else if key exists, add 1 to the linked value
+                map.put(customer.get(i).getCountry(), map.get(customer.get(i).getCountry())+1);
             }
         }
 
+        return sortMapByValue(map);
+    }
 
-//        try {
-//            conn = DriverManager.getConnection(URL);
-//            PreparedStatement prep =
-//                    conn.prepareStatement("SELECT Country FROM customer");
-//
-//            ResultSet set = prep.executeQuery();
-//
-//            while(set.next()) {
-//
-//            }
-//
-//
-//        } catch (Exception exception) {
-//            System.out.println(exception.toString());
-//        }
-//        finally {
-//            try{
-//                conn.close();
-//            } catch (Exception exception){
-//                System.out.println(exception.toString());
-//            }
-//        }
+    public LinkedHashMap<String, Double> getHighestSpender() {
+        var spendingScheme = new HashMap<String, Double>();
 
-        return map;
+        try {
+            conn = DriverManager.getConnection(URL);
+            PreparedStatement prep =
+                    conn.prepareStatement("SELECT Customer.FirstName, Customer.LastName, Invoice.Total " +
+                            "FROM customer INNER JOIN invoice " +
+                            "WHERE Customer.CustomerId=Invoice.CustomerId");
+            ResultSet set = prep.executeQuery();
+
+            while(set.next()) {
+                String name = set.getString("FirstName") + " " + set.getString("LastName");
+                double totalSpent = set.getDouble("Total");
+                if (!spendingScheme.containsKey(name)) { // check if the country has no value in the map, if so set value to 1
+                    spendingScheme.put(name, totalSpent);
+                } else { // else if key exists, add 1 to the linked value
+                    spendingScheme.put(name, spendingScheme.get(name)+totalSpent);
+                }
+            }
+
+        } catch (Exception exception) {
+            System.out.println(exception.toString());
+        }
+
+        return sortMapByValue(spendingScheme);
+    }
+
+    public LinkedHashMap<String, Double> sortMapByValue(HashMap<String, Double> map) {
+        var sortedMap = new LinkedHashMap<String, Double>();
+
+        Stream<Map.Entry<String, Double>> tempMap = map.entrySet()
+                .stream()
+                .sorted(Collections.reverseOrder(Map.Entry.comparingByValue())); // creating a stream sorted by value
+
+        tempMap.forEach(entry -> {
+            sortedMap.put(entry.getKey(), entry.getValue());
+        }); // adding entries to a linked hashmap to preserve the order of the stream
+
+        return sortedMap;
     }
 }

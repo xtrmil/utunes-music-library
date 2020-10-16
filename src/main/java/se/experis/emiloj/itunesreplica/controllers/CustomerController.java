@@ -6,7 +6,10 @@ import se.experis.emiloj.itunesreplica.models.Customer;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.TreeMap;
+import java.util.stream.Stream;
 
 @RestController
 public class CustomerController {
@@ -28,11 +31,14 @@ public class CustomerController {
     }
 
     @RequestMapping(value = "/api/customers/countries", method = RequestMethod.GET)
-    public TreeMap<String, Integer> getNumberOfCostumersPerCountry(){
+    public LinkedHashMap<String, Double> getNumberOfCostumersPerCountry(){
         return customerRepository.getNumberOfCostumersPerCountry();
     }
 
-//    getHigestSpendersDecendingOrder(){
+    @RequestMapping(value = "/api/customers/spending", method = RequestMethod.GET)
+    public LinkedHashMap<String, Double> getHighestSpender(){
+        return customerRepository.getHighestSpender();
+    }
 
 //    @RequestMapping(value = "/api/customers/{id}/popular/{genre}", method = RequestMethod.GET)
 //    public Customer getSpecificCustomersFavouriteGenres(@PathVariable String id,@PathVariable String genre){

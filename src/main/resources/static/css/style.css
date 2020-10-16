@@ -1,5 +1,23 @@
 body {
     width: 100%;
+    font-family: sans-serif;
+}
+.nav-bar {
+    width: 100%;
+    align-items: center;
+    display: grid;
+    grid-template-columns: auto auto auto;
+    column-gap: 50px;
+    justify-content: center;
+    padding-bottom: 10px;
+    border-bottom: 2px solid black;
+}
+.item {
+    font-size: 18px;
+}
+.title {
+    font-size: 32px;
+    font-weight: bold;
 }
 table {
     width: 50%;
