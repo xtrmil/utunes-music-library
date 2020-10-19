@@ -3,6 +3,7 @@ package se.experis.emiloj.itunesreplica.data_access;
 import se.experis.emiloj.itunesreplica.models.Customer;
 import org.sqlite.jdbc4.JDBC4PreparedStatement;
 
+import java.math.BigDecimal;
 import java.sql.*;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -111,7 +112,7 @@ public class CustomerRepository {
         return success;
     }
 
-    public LinkedHashMap<String, Double> getNumberOfCostumersPerCountry() {
+    public LinkedHashMap<String, Integer> getNumberOfCustomersPerCountry() {
         var customer = getAllCustomers(); // create arraylist containing all customers
         var map = new HashMap<String, Double>();
 
@@ -122,12 +123,17 @@ public class CustomerRepository {
                 map.put(customer.get(i).getCountry(), map.get(customer.get(i).getCountry())+1);
             }
         }
+        var sortedMap = new LinkedHashMap<String,Integer>();
+        sortMapByValue(map).forEach(entry ->{
+            sortedMap.put(entry.getKey(), entry.getValue().intValue());
+        });
 
-        return sortMapByValue(map);
+        return sortedMap;
     }
 
     public LinkedHashMap<String, Double> getHighestSpender() {
-        var spendingScheme = new HashMap<String, Double>();
+        var inputMap = new HashMap<String, BigDecimal>();
+        var tempMap = new HashMap<String,Double>();
 
         try {
             conn = DriverManager.getConnection(URL);
@@ -139,32 +145,34 @@ public class CustomerRepository {
 
             while(set.next()) {
                 String name = set.getString("FirstName") + " " + set.getString("LastName");
-                double totalSpent = set.getDouble("Total");
-                if (!spendingScheme.containsKey(name)) { // check if the country has no value in the map, if so set value to 1
-                    spendingScheme.put(name, totalSpent);
+                BigDecimal temp = set.getBigDecimal("Total");
+                if (!inputMap.containsKey(name)) { // check if the country has no value in the map, if so set value to 1
+                    inputMap.put(name, temp);
                 } else { // else if key exists, add 1 to the linked value
-                    spendingScheme.put(name, spendingScheme.get(name)+totalSpent);
+                    inputMap.put(name, inputMap.get(name).add(temp));
                 }
+            }
+
+            for (Map.Entry<String, BigDecimal> entry : inputMap.entrySet()) {    //Step to convert the BigDecimal to Double to fit our SortByValue method
+                tempMap.put(entry.getKey(),entry.getValue().doubleValue());
             }
 
         } catch (Exception exception) {
             System.out.println(exception.toString());
         }
-
-        return sortMapByValue(spendingScheme);
+        var sortedMap = new LinkedHashMap<String,Double>();
+        sortMapByValue(tempMap).forEach(entry ->{ // adding entries to a linked hashmap to preserve the order of the stream
+            sortedMap.put(entry.getKey(), entry.getValue());
+        });
+        return sortedMap;
     }
 
-    public LinkedHashMap<String, Double> sortMapByValue(HashMap<String, Double> map) {
-        var sortedMap = new LinkedHashMap<String, Double>();
+    public Stream<Map.Entry<String, Double>> sortMapByValue(HashMap<String, Double> map) {
 
-        Stream<Map.Entry<String, Double>> tempMap = map.entrySet()
+        Stream<Map.Entry<String, Double>> stream = map.entrySet()
                 .stream()
                 .sorted(Collections.reverseOrder(Map.Entry.comparingByValue())); // creating a stream sorted by value
 
-        tempMap.forEach(entry -> {
-            sortedMap.put(entry.getKey(), entry.getValue());
-        }); // adding entries to a linked hashmap to preserve the order of the stream
-
-        return sortedMap;
+        return stream;
     }
 }
