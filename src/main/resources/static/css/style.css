@@ -1,18 +1,25 @@
 body {
     width: 100%;
     font-family: sans-serif;
+    margin: 0;
 }
 .nav-bar {
-    width: 100%;
+    margin: 10px auto 0 auto;
+    overflow: hidden;
+    width: 98%;
     align-items: center;
     display: grid;
     grid-template-columns: auto auto auto;
     column-gap: 50px;
     justify-content: center;
     padding-bottom: 10px;
-    border-bottom: 2px solid black;
+    border-bottom: 3px solid black;
 }
-.item {
+.nav-bar a {
+    text-decoration: none;
+    color: black;
+}
+.link {
     font-size: 18px;
 }
 .title {
@@ -30,4 +37,37 @@ tr {
 td {
     padding: 1px;
     border: 1px solid black;
+}
+
+/*FRONT PAGE*/
+.container {
+    margin: 10px auto 0 auto;
+    width: 90%;
+    display: grid;
+    grid-template-rows: auto auto auto;
+    row-gap: 30px;
+    justify-content: center;
+
+}
+.genre {
+    display: grid;
+    grid-template-rows: auto auto;
+    row-gap: 25px;
+}
+.genre-title {
+    font-weight: bold;
+    border-bottom: black 2px solid;
+    width: 100%;
+}
+.genre-items {
+    display: grid;
+    grid-template-columns: repeat(5, auto);
+    column-gap: 10px;
+}
+.item {
+    width: 240px;
+    height: 120px;
+    border: 1px solid black;
+    border-radius: 10px;
+    text-align: center;
 }

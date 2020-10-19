@@ -8,18 +8,43 @@
 <body>
 
 <div class="nav-bar">
-    <div class="item">All users</div>
-    <div class="title">Utunes Music Library</div>
-    <div class="item">User per country</div>
+    <a href="customerList" class="link">All users</a>
+    <a href="#" class="title">Utunes Music Library</a>
+    <a href="popular" class="link">User per country</a>
 </div>
-<table>
-    <tr th:each="cust: ${customers}">
-        <td th:text="${cust.getCustomerId()}"></td>
-        <td th:text="${cust.getFirstName()} + ' ' + ${cust.getLastName()}"></td>
-        <td th:text="${cust.getCountry()}"></td>
-        <td th:text="${cust.getPostalCode()}"></td>
-        <td th:text="${cust.getPhoneNumber()}"></td>
-    </tr>
-</table>
+
+<div class="container">
+    <div class="genre">
+        <div class="genre-title">Artists</div>
+        <div class="genre-items">
+            <div class="item">Item</div>
+            <div class="item">Item</div>
+            <div class="item">Item</div>
+            <div class="item">Item</div>
+            <div class="item">Item</div>
+        </div>
+    </div>
+    <div class="genre">
+        <div class="genre-title">Songs</div>
+        <div class="genre-items">
+            <div class="item">Item</div>
+            <div class="item">Item</div>
+            <div class="item">Item</div>
+            <div class="item">Item</div>
+            <div class="item">Item</div>
+        </div>
+    </div>
+    <div class="genre">
+        <div class="genre-title">Genres</div>
+        <div class="genre-items">
+            <div class="item">Item</div>
+            <div class="item">Item</div>
+            <div class="item">Item</div>
+            <div class="item">Item</div>
+            <div class="item">Item</div>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>

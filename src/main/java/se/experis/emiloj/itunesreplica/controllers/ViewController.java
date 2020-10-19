@@ -26,4 +26,12 @@ public class ViewController {
         return "customerList";
     }
 
+    @RequestMapping(value = "/popular", method = RequestMethod.GET)
+    public String getCustomersByCountry() {
+        return "popular";
+    }
+
+    //@RequestMapping(value = "/", method = RequestMethod.GET)
+    //public String placeholder() { return "placeholder";
+
 }
