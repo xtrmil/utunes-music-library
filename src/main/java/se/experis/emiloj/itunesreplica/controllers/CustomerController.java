@@ -5,6 +5,7 @@ import se.experis.emiloj.itunesreplica.data_access.CustomerRepository;
 import se.experis.emiloj.itunesreplica.models.Customer;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -31,8 +32,8 @@ public class CustomerController {
     }
 
     @RequestMapping(value = "/api/customers/countries", method = RequestMethod.GET)
-    public LinkedHashMap<String, Double> getNumberOfCostumersPerCountry(){
-        return customerRepository.getNumberOfCostumersPerCountry();
+    public LinkedHashMap<String, Integer> getNumberOfCustomersPerCountry(){
+        return customerRepository.getNumberOfCustomersPerCountry();
     }
 
     @RequestMapping(value = "/api/customers/spending", method = RequestMethod.GET)
