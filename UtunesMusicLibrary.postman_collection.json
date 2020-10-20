@@ -1,0 +1,149 @@
+{
+	"info": {
+		"_postman_id": "3e884508-6848-4537-b982-6957b89c6962",
+		"name": "UtunesMusicLibrary",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "localhost:8080/api/customers",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\":\"Tetst\",\r\n    \"lastName\":\"testare\",\r\n    \"country\":\"Sweden\",\r\n    \"postalCode\":\"12342\",\r\n    \"phone\":\"06404065\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/customers",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"customers"
+					]
+				},
+				"description": "Post new customer to database"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8080/api/customers",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\": \"Sean\",\r\n    \"lastName\": \"Skinner\",\r\n    \"country\": \"Norway\",\r\n    \"postalCode\": \"65065\",\r\n    \"phoneNumber\": \"0703892438\",\r\n    \"customerId\": 12\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/customers",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"customers"
+					]
+				},
+				"description": "Update a customer in database"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8080/api/customers/countries",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/customers/countries",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"customers",
+						"countries"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8080/api/customers/spending",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/customers/spending",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"customers",
+						"spending"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8080/api/customers/12/popular/genre",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/customers/12/popular/genre",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"customers",
+						"12",
+						"popular",
+						"genre"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8080/api/customers",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/customers",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"customers"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
