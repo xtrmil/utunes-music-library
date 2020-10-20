@@ -34,6 +34,18 @@ th {
 }
 
 /*FRONT PAGE*/
+.search {
+    margin: 0 auto;
+    width: 50%;
+}
+.search form {
+    text-align: center;
+    margin:10px auto 0 auto;
+}
+#searchTerm {
+    border: none;
+    border-bottom: 2px solid #bbb;
+}
 .container {
     margin: 10px auto 0 auto;
     width: 90%;
