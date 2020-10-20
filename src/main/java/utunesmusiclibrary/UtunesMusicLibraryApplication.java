@@ -1,13 +1,13 @@
-package se.experis.emiloj.itunesreplica;
+package utunesmusiclibrary;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ItunesReplicaApplication {
+public class UtunesMusicLibraryApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(ItunesReplicaApplication.class, args);
+        SpringApplication.run(UtunesMusicLibraryApplication.class, args);
     }
 
 }

@@ -3,16 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <title>Search</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-<table>
-    <tr th:each="track: ${tracks}">
-        <td th:text="${track.getArtistName()}"></td>
-        <td th:text="${track.getTrackName()}"></td>
-        <td th:text="${track.getAlbumName()}"></td>
-        <td th:text="${track.getGenreName()}"></td>
+<div class="search-title">Search results for "<p th:text="${trackName}"></p>"...</div>
 
-    </tr>
-</table>
+    <table class="result-list">
+        <tr>
+            <th>Artist</th>
+            <th>Song</th>
+            <th>Album</th>
+            <th>Genre</th>
+        </tr>
+        <tr class="search-result" th:each="track: ${tracks}"> <!-- Create track for each row in tracks-->
+            <td th:text="${track.getArtistName()}"></td>
+            <td th:text="${track.getTrackName()}"></td>
+            <td th:text="${track.getAlbumName()}"></td>
+            <td th:text="${track.getGenreName()}"></td>
+        </tr>
+    </table>
 </body>
 </html>

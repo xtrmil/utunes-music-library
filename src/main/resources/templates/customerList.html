@@ -10,11 +10,17 @@
 <div class="nav-bar">
     <a href="#" class="title">All users</a>
     <a href="/" class="link">Utunes Music Library</a>
-    <a href="popular" class="link">User per country</a>
 </div>
 
 <table>
-    <tr th:each="cust: ${customers}">
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Country</th>
+        <th>Postal Code</th>
+        <th>Phone</th>
+    </tr>
+    <tr th:each="cust: ${customers}"> <!-- Create cust for each row in customers-->
         <td th:text="${cust.getCustomerId()}"></td>
         <td th:text="${cust.getFirstName()} + ' ' + ${cust.getLastName()}"></td>
         <td th:text="${cust.getCountry()}"></td>

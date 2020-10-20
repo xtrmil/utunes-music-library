@@ -1,4 +1,4 @@
-package se.experis.emiloj.itunesreplica;
+package utunesmusiclibrary;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

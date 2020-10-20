@@ -1,19 +1,17 @@
-package se.experis.emiloj.itunesreplica.controllers;
+package utunesmusiclibrary.controllers;
 
-import org.springframework.http.MediaType;
-import se.experis.emiloj.itunesreplica.data_access.CustomerRepository;
-import se.experis.emiloj.itunesreplica.models.Customer;
+import org.springframework.http.HttpStatus;
+import utunesmusiclibrary.data_access.CustomerRepository;
+import utunesmusiclibrary.models.Customer;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.stream.Stream;
 
 @RestController
-public class CustomerController {
+public class CustomerController { // API REST Controller for Postman-requests
     CustomerRepository customerRepository = new CustomerRepository();
 
     @RequestMapping(value = "/api/customers", method = RequestMethod.GET)
@@ -44,6 +42,6 @@ public class CustomerController {
     @RequestMapping(value = "/api/customers/{id}/popular/genre", method = RequestMethod.GET)
     @ResponseBody
     public ArrayList<String> getCustomersFavoriteGenre(@PathVariable int id) {
-    return customerRepository.getCustomersFavoriteGenre(id);
-}
+        return customerRepository.getCustomersFavoriteGenre(id);
+    }
 }
