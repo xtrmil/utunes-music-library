@@ -9,7 +9,7 @@ At the home-page, the user is presented with a view of 5 random songs, 5 random 
 The user can make a search for a songname and will be redirected to a page where a table shows all the songs that contains the searchterm anywhere in the name.
 The user will also be able to see a list of all the users in the database by navigating through the simple nav-bar to "All users".
 
-Postman REST API requests: [![Run in Postman](UtunesMusicLibrary.postman_collection.json)
+Postman REST API collection can be found in the root folder.
 
 Following is some screenshots of the webpage in action:
 
