@@ -1,12 +1,8 @@
 package utunesmusiclibrary.controllers;
 
-import org.springframework.http.HttpStatus;
 import utunesmusiclibrary.data_access.CustomerRepository;
 import utunesmusiclibrary.models.Customer;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 

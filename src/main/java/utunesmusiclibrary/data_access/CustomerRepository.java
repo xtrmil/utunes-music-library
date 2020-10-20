@@ -29,12 +29,11 @@ public class CustomerRepository {
                         set.getString("Phone")
                 ));
             }
-            System.out.println("Get all went well!");
+            System.out.println("All customers successfully collected!");
 
         }catch(Exception exception){
             System.out.println(exception.toString());
-        }
-        finally {
+        } finally {
             try{
                 conn.close();
             } catch (Exception exception){
@@ -48,11 +47,10 @@ public class CustomerRepository {
         Boolean success = false;
 
         try{
-            // connect
             conn = DriverManager.getConnection(URL);
             PreparedStatement prep =
                     conn.prepareStatement("INSERT INTO customer(FirstName,LastName,Company,Address,City,State,Country,PostalCode,Phone,Fax,Email,SupportRepId)" +
-                            " VALUES(?,?,'Experis','Street 2','Stockholm','Sodermanland',?,?,?,'74567','first.last@mail.com',8)"); //
+                            " VALUES(?,?,'Experis','Street 2','Stockholm','Soedermanland',?,?,?,'74567','first.last@mail.com',8)");
             prep.setString(1,customer.getFirstName());
             prep.setString(2,customer.getLastName());
             prep.setString(3,customer.getCountry());
@@ -60,14 +58,13 @@ public class CustomerRepository {
             prep.setString(5,customer.getPhoneNumber());
 
             int result = prep.executeUpdate();
-            success = (result != 0); // if res = 1; true   //Ändra till status code int
+            success = (result != 0);
 
-            System.out.println("Add went well!");
+            System.out.println("Customer successfully added!");
 
         }catch(Exception exception){
             System.out.println(exception.toString());
-        }
-        finally {
+        } finally {
             try{
                 conn.close();
             } catch (Exception exception){
@@ -94,12 +91,11 @@ public class CustomerRepository {
             int result = prep.executeUpdate();
             success = (result != 0);
 
-            System.out.println("Update went well!");
+            System.out.println("Update successfully executed!");
 
         } catch (Exception exception) {
             System.out.println(exception.toString());
-        }
-        finally {
+        } finally {
             try{
                 conn.close();
             } catch (Exception exception){
@@ -111,18 +107,18 @@ public class CustomerRepository {
 
     public LinkedHashMap<String, Integer> getNumberOfCustomersPerCountry() {
         var customer = getAllCustomers(); // create arraylist containing all customers
-        var map = new HashMap<String, Double>();
+        var tempMap = new HashMap<String, Double>();
 
         for (int i = 0; i<customer.size(); i++) {
-            if (!map.containsKey(customer.get(i).getCountry())) { // check if the country has no value in the map, if so set value to 1
-                map.put(customer.get(i).getCountry(), 1.0);
+            if (!tempMap.containsKey(customer.get(i).getCountry())) { // check if the country has no value in the map, if so set value to 1
+                tempMap.put(customer.get(i).getCountry(), 1.0);
             } else { // else if key exists, add 1 to the linked value
-                map.put(customer.get(i).getCountry(), map.get(customer.get(i).getCountry())+1);
+                tempMap.put(customer.get(i).getCountry(), tempMap.get(customer.get(i).getCountry())+1);
             }
         }
         var sortedMap = new LinkedHashMap<String,Integer>();
-        sortMapByValue(map).forEach(entry ->{ // adding entries to a linked hashmap to preserve the order of the stream
-            sortedMap.put(entry.getKey(), entry.getValue().intValue());
+        mapToStreamSortedByValue(tempMap).forEach(entry ->{
+            sortedMap.put(entry.getKey(), entry.getValue().intValue()); // adding entries from the stream to a linked hashmap to preserve order
         });
         return sortedMap;
     }
@@ -141,7 +137,7 @@ public class CustomerRepository {
 
             while(set.next()) {
                 String name = set.getString("FirstName") + " " + set.getString("LastName");
-                BigDecimal temp = set.getBigDecimal("Total");
+                BigDecimal temp = set.getBigDecimal("Total"); // using BigDecimal for accurate addition of decimal values
                 if (!inputMap.containsKey(name)) { // check if the country has no value in the map, if so set value to 1
                     inputMap.put(name, temp);
                 } else { // else if key exists, add 1 to the linked value
@@ -149,16 +145,22 @@ public class CustomerRepository {
                 }
             }
 
-            for (Map.Entry<String, BigDecimal> entry : inputMap.entrySet()) {    //Step to convert the BigDecimal to Double to fit our SortByValue method
+            for (Map.Entry<String, BigDecimal> entry : inputMap.entrySet()) {  //Step to convert the BigDecimal to Double to fit our mapToStreamSortedByValue method
                 tempMap.put(entry.getKey(),entry.getValue().doubleValue());
             }
 
         } catch (Exception exception) {
             System.out.println(exception.toString());
+        } finally {
+            try{
+                conn.close();
+            } catch (Exception exception){
+                System.out.println(exception.toString());
+            }
         }
         var sortedMap = new LinkedHashMap<String,Double>();
-        sortMapByValue(tempMap).forEach(entry ->{ // adding entries to a linked hashmap to preserve the order of the stream
-            sortedMap.put(entry.getKey(), entry.getValue());
+        mapToStreamSortedByValue(tempMap).forEach(entry ->{
+            sortedMap.put(entry.getKey(), entry.getValue()); // adding entries from the stream to a linked hashmap to preserve order
         });
         return sortedMap;
     }
@@ -185,19 +187,24 @@ public class CustomerRepository {
 
             while (set.next()) {
                 String name = set.getString("Name");
-                if (!tempMap.containsKey(name)) { // check if the country has no value in the map, if so set value to 1
-                    tempMap.put(name, 1.0);
+                if (!tempMap.containsKey(name)) { // check if the genre has no value in the map, if so set value to 1
+                    tempMap.put(name, 1D);
                 } else { // else if key exists, add 1 to the linked value
-                    tempMap.put(name, tempMap.get(name) + 1.0);
+                    tempMap.put(name, tempMap.get(name) + 1D);
                 }
             }
 
         } catch(Exception exception){
             System.out.println(exception.toString());
+        } finally {
+            try{
+                conn.close();
+            } catch (Exception exception){
+                System.out.println(exception.toString());
+            }
         }
-
-        double maxValue = sortMapByValue(tempMap).findFirst().get().getValue(); // get first value from the sorted map and declares it to maxValue
-        sortMapByValue(tempMap).filter(e-> e.getValue() == maxValue) // Add all keys that has the same value tied to it as maxValue, to an array
+        double maxValue = mapToStreamSortedByValue(tempMap).findFirst().get().getValue(); // get the highest value from the stream (first favorite)
+        mapToStreamSortedByValue(tempMap).filter(e-> e.getValue() == maxValue) // get all values in the stream equal to maxValue, which is all favorites
                 .forEach(entry ->{
                 favorites.add(entry.getKey());
         });
@@ -205,7 +212,7 @@ public class CustomerRepository {
         return favorites;
     }
 
-    public Stream<Map.Entry<String, Double>> sortMapByValue(HashMap<String, Double> map) {
+    public Stream<Map.Entry<String, Double>> mapToStreamSortedByValue(HashMap<String, Double> map) {
 
         Stream<Map.Entry<String, Double>> stream = map.entrySet()
                 .stream()
