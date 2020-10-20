@@ -19,7 +19,7 @@ public class TrackRepository {
         try{
             conn = DriverManager.getConnection(URL);
             PreparedStatement prep =
-                    conn.prepareStatement("SELECT Track.Name AS TN, Artist.Name AS AN, Album.Title AS ATL, Genre.Name AS GN FROM Track " +
+                    conn.prepareStatement("SELECT Track.Name AS tName, Artist.Name AS aName, Album.Title AS aTitle, Genre.Name AS gName FROM Track " +
                             "INNER JOIN Album " +
                             "ON Track.AlbumId = Album.AlbumId " +
                             "INNER JOIN Artist " +
@@ -27,14 +27,14 @@ public class TrackRepository {
                             "INNER JOIN Genre " +
                             "ON Track.GenreId = Genre.GenreId " +
                             "WHERE Track.Name LIKE ? ");
-            prep.setString(1,"%"+searchTerm+"%"); // get information about track that contains searchterm anywhere in the name
+            prep.setString(1,"%"+searchTerm+"%");
             ResultSet set = prep.executeQuery();
             while(set.next()){
                 tracks.add( new Track(
-                    set.getString("TN"),
-                    set.getString("AN"),
-                    set.getString("ATL"),
-                    set.getString("GN")
+                    set.getString("tName"),
+                    set.getString("aName"),
+                    set.getString("aTitle"),
+                    set.getString("gName")
                 ));
             }
 
@@ -52,11 +52,11 @@ public class TrackRepository {
     }
 
     public String[][] getRandomItems() {
-        ArrayList<String> tempArray = new ArrayList<>();
+        ArrayList<String> tempArray = new ArrayList<>(); // array that will store response from sql queries
         String[][] items = new String[3][5];
-        List<PreparedStatement> statements = new ArrayList<>(); // creates an array of prepared statements
+        List<PreparedStatement> statements = new ArrayList<>();
 
-        try{
+        try {
             conn = DriverManager.getConnection(URL);
 
             PreparedStatement prep1 =
@@ -69,13 +69,19 @@ public class TrackRepository {
             statements.add(prep2);
             statements.add(prep3);
 
-            for (int i = 0; i < statements.size(); i++) { // run every statement in array and add all items to a new array
+            for (int i = 0; i < statements.size(); i++) { // run every statement in array and add all items to an array
                 ResultSet set = statements.get(i).executeQuery();
                 while(set.next()) {
                     tempArray.add(set.getString("Name"));
                 }
             }
-
+            int count = 0;
+            for (int i = 0; i < items.length; i++) { // creating a two-dimensional array containing the items with a structure of [3][5]
+                for (int j = 0; j < items[i].length; j++) {
+                    items[i][j] = tempArray.get(j+count);
+                }
+                count = count + 5;
+            }
         }catch(Exception exception){
             System.out.println(exception.toString());
         }
@@ -85,13 +91,6 @@ public class TrackRepository {
             } catch (Exception exception){
                 System.out.println(exception.toString());
             }
-        }
-        int count = 0;
-        for (int i = 0; i < items.length; i++) { // creating a two-dimensional containing the items with a structure of [3][5]
-            for (int j = 0; j < items[i].length; j++) {
-                items[i][j] = tempArray.get(j+count);
-            }
-            count = count + 5;
         }
         return items;
     }
