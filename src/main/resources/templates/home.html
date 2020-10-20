@@ -8,11 +8,9 @@
 <body>
 
 <div class="nav-bar">
-    <a href="customerList" class="link">All users</a>
-    <a href="#" class="title">Utunes Music Library</a>
+    <a th:href="@{/customerList}" class="link">All users</a>
+    <a th:href="@{/}" class="title">Utunes Music Library</a>
 </div>
-
-
 
 <div class="search">
     <form th:action="@{/search/}" th:object="${track}" method="get">

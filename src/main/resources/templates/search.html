@@ -6,8 +6,12 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-<div class="search-title">Search results for "<p th:text="${trackName}"></p>"...</div>
+<div class="nav-bar">
+    <a th:href="@{/customerList}" class="link">All users</a>
+    <a th:href="@{/}" class="title">Utunes Music Library</a>
+</div>
 
+<div class="search-title">Search results for "<span th:text="${trackName}"></span>"...</div>
     <table class="result-list">
         <tr>
             <th>Artist</th>
