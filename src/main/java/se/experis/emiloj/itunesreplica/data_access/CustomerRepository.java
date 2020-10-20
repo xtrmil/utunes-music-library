@@ -1,5 +1,6 @@
 package se.experis.emiloj.itunesreplica.data_access;
 
+
 import se.experis.emiloj.itunesreplica.models.Customer;
 
 import java.math.BigDecimal;
@@ -73,7 +74,6 @@ public class CustomerRepository {
                 System.out.println(exception.toString());
             }
         }
-        // ---
         return success;
     }
 
@@ -106,7 +106,6 @@ public class CustomerRepository {
                 System.out.println(exception.toString());
             }
         }
-
         return success;
     }
 
@@ -125,7 +124,6 @@ public class CustomerRepository {
         sortMapByValue(map).forEach(entry ->{
             sortedMap.put(entry.getKey(), entry.getValue().intValue());
         });
-
         return sortedMap;
     }
 
@@ -168,6 +166,7 @@ public class CustomerRepository {
     public ArrayList<String> getCustomersFavoriteGenre(int id) {
 
         var tempMap = new HashMap<String, Double>();
+        var favorites = new ArrayList<String>();
 
         try {
             conn = DriverManager.getConnection(URL);
@@ -197,19 +196,14 @@ public class CustomerRepository {
             System.out.println(exception.toString());
         }
 
+        double maxValue = sortMapByValue(tempMap).findFirst().get().getValue();
+        sortMapByValue(tempMap).filter(e-> e.getValue() == maxValue)
+                .forEach(entry ->{
+                favorites.add(entry.getKey());
+        });
 
-        var favorites = new ArrayList<String>();
-
-        favorites.add(sortMapByValue(tempMap).findFirst().get().getKey());
-        double temp = sortMapByValue(tempMap).findFirst().get().getValue();
-
-        if(temp == sortMapByValue(tempMap).skip(1).findFirst().get().getValue()){
-            favorites.add(sortMapByValue(tempMap).skip(1).findFirst().get().getKey());
-        }
-            return favorites;
+        return favorites;
     }
-
-
 
     public Stream<Map.Entry<String, Double>> sortMapByValue(HashMap<String, Double> map) {
 
