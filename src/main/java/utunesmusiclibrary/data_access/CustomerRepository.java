@@ -1,7 +1,6 @@
-package se.experis.emiloj.itunesreplica.data_access;
+package utunesmusiclibrary.data_access;
 
-
-import se.experis.emiloj.itunesreplica.models.Customer;
+import utunesmusiclibrary.models.Customer;
 
 import java.math.BigDecimal;
 import java.sql.*;
@@ -10,7 +9,7 @@ import java.util.stream.Stream;
 
 public class CustomerRepository {
 
-    private String URL ="jdbc:sqlite::resource:Chinook_Sqlite.sqlite";
+    private final String URL ="jdbc:sqlite::resource:Chinook_Sqlite.sqlite";
     private Connection conn = null;
 
     public ArrayList<Customer> getAllCustomers(){
@@ -47,12 +46,13 @@ public class CustomerRepository {
 
     public Boolean addCustomer(Customer customer){
         Boolean success = false;
+
         try{
             // connect
             conn = DriverManager.getConnection(URL);
             PreparedStatement prep =
                     conn.prepareStatement("INSERT INTO customer(FirstName,LastName,Company,Address,City,State,Country,PostalCode,Phone,Fax,Email,SupportRepId)" +
-                            " VALUES(?,?,'Experis','Street 2','Stockholm','Sodermanland',?,?,?,'74567','first.last@mail.com',8)");
+                            " VALUES(?,?,'Experis','Street 2','Stockholm','Sodermanland',?,?,?,'74567','first.last@mail.com',8)"); //
             prep.setString(1,customer.getFirstName());
             prep.setString(2,customer.getLastName());
             prep.setString(3,customer.getCountry());
@@ -121,7 +121,7 @@ public class CustomerRepository {
             }
         }
         var sortedMap = new LinkedHashMap<String,Integer>();
-        sortMapByValue(map).forEach(entry ->{
+        sortMapByValue(map).forEach(entry ->{ // adding entries to a linked hashmap to preserve the order of the stream
             sortedMap.put(entry.getKey(), entry.getValue().intValue());
         });
         return sortedMap;
@@ -196,8 +196,8 @@ public class CustomerRepository {
             System.out.println(exception.toString());
         }
 
-        double maxValue = sortMapByValue(tempMap).findFirst().get().getValue();
-        sortMapByValue(tempMap).filter(e-> e.getValue() == maxValue)
+        double maxValue = sortMapByValue(tempMap).findFirst().get().getValue(); // get first value from the sorted map and declares it to maxValue
+        sortMapByValue(tempMap).filter(e-> e.getValue() == maxValue) // Add all keys that has the same value tied to it as maxValue, to an array
                 .forEach(entry ->{
                 favorites.add(entry.getKey());
         });
