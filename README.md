@@ -10,6 +10,9 @@ The user can make a search for a songname and will be redirected to a page where
 The user will also be able to see a list of all the users in the database by navigating through the simple nav-bar to "All users".
 
 Following is some screenshots of the webpage in action:
+![homepage](screenshots/Utunes.PNG)
+
+![searchresult](screenshots/searchresult.PNG)
 
 ## License
 Emil Oja and Ludwig Carlsson, 2020
