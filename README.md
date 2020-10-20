@@ -1,4 +1,4 @@
-# utunes-music-library
+# Utunes Music Library
 
 This is an application that takes the user on a journey through a database filled with songs by different artists and from different genres.
 The home-page shows you a random asortment of songs, artists and genres that makes you wonder.. How many artists and songs and genres exist in this extensive database?!
@@ -10,10 +10,13 @@ The user can make a search for a songname and will be redirected to a page where
 The user will also be able to see a list of all the users in the database by navigating through the simple nav-bar to "All users".
 
 Following is some screenshots of the webpage in action:
+
 Homepage:
+
 ![homepage](screenshots/Utunes.PNG)
 
 Searchresult:
+
 ![searchresult](screenshots/searchresult.PNG)
 
 ## License
