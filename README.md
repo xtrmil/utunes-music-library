@@ -11,11 +11,11 @@ The user will also be able to see a list of all the users in the database by nav
 
 Following is some screenshots of the webpage in action:
 
-Homepage:
+#### Homepage:
 
 ![homepage](screenshots/Utunes.PNG)
 
-Searchresult:
+#### Searchresult:
 
 ![searchresult](screenshots/searchresult.PNG)
 
